@@ -1,2 +1,10 @@
 language: node_js
 
+services:
+  - docker
+
+script:
+- docker build -t node-ci-cd-example .
+- docker run -d node-ci-cd-example
+- docker ps -a
+
