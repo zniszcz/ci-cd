@@ -1,15 +1,14 @@
-language: node_js
+dist: trusty
 
-services:
-  - docker
-
-script:
-- docker build -t node-ci-cd-example .
-- docker run -d node-ci-cd-example
-- docker ps -a
-
-deploy:
-  provider: script
-  script: bash docker_push
-  on:
-    branch: master
+jobs:
+  include:
+    - stage: build docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t node-ci-cd-example .
+      - docker images
+      - docker tag node-ci-cd-example $DOCKER_USERNAME/node-ci-cd-example
+      - docker push $DOCKER_USERNAME/node-ci-cd-example
+    # - stage: test
+    #   script: docker run --rm $DOCKER_USERNAME/node-ci-cd-example cat hello.txt
+    # - script: docker run --rm $DOCKER_USERNAME/node-ci-cd-example cat hello.txt
