@@ -8,3 +8,8 @@ script:
 - docker run -d node-ci-cd-example
 - docker ps -a
 
+deploy:
+  provider: script
+  script: bash docker_push
+  on:
+    branch: master
